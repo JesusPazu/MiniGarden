@@ -1,0 +1,54 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> MiniGarden </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id="container" class="ion-padding">
+    <form [formGroup]="loginForm" (ngSubmit)="loginUser($event)">
+      <ion-img src="../../../assets/Logo-inicio.png" alt="img"> </ion-img>
+
+      <h3 class="ion-margin-bottom ion-margin-left">Inicio de Sesion</h3>
+
+      <div class="ion-margin-bottom" style="text-align: left">
+        <ion-input
+          formControlName="email"
+          label="Dirección de Correo"
+          label-placement="floating"
+          fill="outline"
+          placeholder="Ingrese su correo electronico"
+          type="email"
+        ></ion-input>
+        <ion-text *ngIf="invalidField('email')" color="danger">
+          {{ getErrorMessage("email") }}
+        </ion-text>
+      </div>
+
+      <div class="ion-margin-bottom" style="text-align: left">
+        <ion-input
+          formControlName="password"
+          label="Contraseña"
+          label-placement="floating"
+          fill="outline"
+          placeholder="Ingrese su contraseña"
+          type="password"
+        ></ion-input>
+        <ion-label *ngIf="invalidField('password')" color="danger">
+          {{ getErrorMessage("password") }}
+        </ion-label>
+      </div>
+
+      <ion-button color="success" type="submit">
+        <ion-icon name="log-in-outline"></ion-icon>
+        Ingresar
+      </ion-button>
+    </form>
+    <br />
+    <br />
+    <p>¿NO estas registrado?</p>
+    <ion-button color="secondary" routerLink="/registro-usuarios">
+      <ion-icon name="person-add-outline"></ion-icon>
+    </ion-button>
+  </div>
+</ion-content>

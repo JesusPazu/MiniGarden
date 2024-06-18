@@ -1,0 +1,7 @@
+{
+  "name": "MiniGarden",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
