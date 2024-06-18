@@ -3,4 +3,6 @@ export interface CultivoDto {
   nombreCultivo: string;
   tipoCultivo: string;
   imagenCultivo: string;
+  temperatura: number;
+  humedad: number;
 }

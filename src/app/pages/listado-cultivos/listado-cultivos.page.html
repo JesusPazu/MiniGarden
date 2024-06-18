@@ -1,13 +1,23 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>listadoCultivos</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title> Listado de Cultivos </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">listadoCultivos</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="ion-padding">
+    <ion-card *ngFor="let cultivo of cultivos">
+      <ion-card-header>
+        <ion-card-title>{{ cultivo.nombreCultivo }} <ion-icon name="leaf-outline"></ion-icon></ion-card-title>
+        <ion-card-subtitle>{{ cultivo.tipoCultivo }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p><b>Temperatura: </b>{{ cultivo.temperatura }}°C</p>
+        <p><b>Humedad: </b>{{ cultivo.humedad }}%</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

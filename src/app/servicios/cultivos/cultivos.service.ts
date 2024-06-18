@@ -6,10 +6,10 @@ import {
   collectionData,
   doc,
   getDoc,
-  runTransaction,
 } from '@angular/fire/firestore';
 import { AuthService } from '../auth/auth.service';
 import { CultivoDto } from 'src/app/dtos/cultivo-dto';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -21,29 +21,19 @@ export class CultivosService {
   ) {}
 
   async guardarCultivo(cultivo: CultivoDto) {
-    let user = this.authService.getUser();
-    const placeRef = collection(
-      this.fireStore,
-      `userProfile/${user?.uid}/cropList`,
-    );
+    const placeRef = collection(this.fireStore, 'cropList');
     return await addDoc(placeRef, cultivo);
   }
 
   buscarListaCultivos() {
-    let user = this.authService.getUser();
-    const placeRef = collection(
-      this.fireStore,
-      `userProfile/${user?.uid}/cropList`,
-    );
-    return collectionData(placeRef, { idField: 'id' });
+    const placeRef = collection(this.fireStore, 'cropList');
+    return collectionData(placeRef, { idField: 'id' }) as Observable<
+      CultivoDto[]
+    >;
   }
 
   buscarDetalleCultivo(cultivoId: string) {
-    let user = this.authService.getUser();
-    const placeRef = doc(
-      this.fireStore,
-      `userProfile/${user?.uid}/cropList/${cultivoId}`,
-    );
+    const placeRef = doc(this.fireStore, `cropList/${cultivoId}`);
     return getDoc(placeRef);
   }
 }
