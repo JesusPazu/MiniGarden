@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 import { CultivoDto } from 'src/app/dtos/cultivo-dto';
 import { CultivosService } from 'src/app/servicios/cultivos/cultivos.service';
 
@@ -19,13 +20,19 @@ export class RegistroCultivosPage implements OnInit {
   constructor(
     private router: Router,
     private cultivosService: CultivosService,
+    private loadingCtrl: LoadingController,
   ) {}
 
   ngOnInit(): void {
     console.log('Init');
   }
 
-  guardarCultivo() {
+  async guardarCultivo() {
+    const loader = await this.loadingCtrl.create({
+      message: 'Guardando...',
+    });
+    loader.present();
+
     this.cultivo.temperatura = Math.floor(
       Math.random() * (this.temMax - this.temMin) + this.temMin,
     );
@@ -33,6 +40,7 @@ export class RegistroCultivosPage implements OnInit {
       Math.random() * (this.HumMax - this.HumMin) + this.HumMin,
     );
     this.cultivosService.guardarCultivo(this.cultivo).then(() => {
+      loader.dismiss();
       this.router.navigateByUrl('home');
     });
   }

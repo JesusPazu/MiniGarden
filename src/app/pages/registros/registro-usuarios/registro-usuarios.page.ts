@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/servicios/auth/auth.service';
 
 @Component({
@@ -18,6 +18,7 @@ export class RegistroUsuariosPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private alertController: AlertController,
+    private loadingCtrl: LoadingController,
   ) {
     this.registerForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -29,7 +30,12 @@ export class RegistroUsuariosPage implements OnInit {
     this.formSubmitted = false;
   }
 
-  signUpUser(event: Event) {
+  async signUpUser(event: Event) {
+    const loader = await this.loadingCtrl.create({
+      message: 'Registrando...',
+    });
+    loader.present();
+
     this.formSubmitted = true;
     event.preventDefault();
     if (this.registerForm?.valid) {
@@ -38,12 +44,16 @@ export class RegistroUsuariosPage implements OnInit {
         .signUpUser(value.email, value.password)
         .then((result) => {
           if (result) {
+            loader.dismiss();
             this.router.navigateByUrl('login');
           }
         })
         .catch((error) => {
+          loader.dismiss();
           console.log(error);
         });
+    } else {
+      loader.dismiss();
     }
   }
 

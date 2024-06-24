@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/servicios/auth/auth.service';
 
 @Component({
@@ -18,6 +18,7 @@ export class LoginPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private alertController: AlertController,
+    private loadingCtrl: LoadingController,
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -29,7 +30,12 @@ export class LoginPage implements OnInit {
     this.formSubmitted = false;
   }
 
-  loginUser(event: Event) {
+  async loginUser(event: Event) {
+    const loader = await this.loadingCtrl.create({
+      message: 'Ingresando...',
+    });
+    loader.present();
+    
     this.formSubmitted = true;
     event.preventDefault();
     if (this.loginForm?.valid) {
@@ -38,8 +44,10 @@ export class LoginPage implements OnInit {
         .loginUser(value.email, value.password)
         .then(async (result) => {
           if (result) {
+            loader.dismiss();
             this.router.navigateByUrl('home');
           } else {
+            loader.dismiss();
             const alert = this.alertController.create({
               message: 'Correo o Contraseña Incorrecta.',
               buttons: [{ text: 'OK', role: 'cancel' }],
@@ -48,8 +56,11 @@ export class LoginPage implements OnInit {
           }
         })
         .catch((error) => {
+          loader.dismiss();
           console.log(error);
         });
+    } else {
+      loader.dismiss();
     }
   }
 
